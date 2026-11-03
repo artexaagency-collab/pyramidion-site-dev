@@ -202,3 +202,83 @@ p { margin: 0; text-wrap: pretty; }
 @media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
 .sticky { position: sticky; top: 96px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* =====================================================================
+   Mouvement. Principe : le contenu arrive, il ne saute pas.
+   Apparitions au scroll (.reveal), zoom lent des heros, filets qui se
+   tracent, compteurs. Tout est coupé par prefers-reduced-motion.
+   ===================================================================== */
+
+/* Entrée de page : fondu court */
+body { animation: page-in .6s ease both; }
+@keyframes page-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* Apparition au scroll : opacité + translation + léger flou */
+.reveal { opacity: 0; transform: translateY(28px); filter: blur(2px); transition: opacity .9s cubic-bezier(.2,.65,.2,1), transform .9s cubic-bezier(.2,.65,.2,1), filter .9s ease; transition-delay: var(--d, 0ms); will-change: opacity, transform; }
+.reveal.in { opacity: 1; transform: none; filter: none; }
+
+/* Hero d'accueil : zoom lent sur la photo, texte en cascade */
+.hero img.bg { transform: scale(1.1); animation: hero-zoom 7s cubic-bezier(.2,.6,.2,1) forwards; }
+@keyframes hero-zoom { to { transform: scale(1); } }
+.hero .wrap > * { opacity: 0; transform: translateY(22px); animation: rise .9s cubic-bezier(.2,.65,.2,1) forwards; }
+.hero .wrap > :nth-child(1) { animation-delay: .35s } .hero .wrap > :nth-child(2) { animation-delay: .5s }
+.hero .wrap > :nth-child(3) { animation-delay: .7s } .hero .wrap > :nth-child(4) { animation-delay: .85s } .hero .wrap > :nth-child(5) { animation-delay: 1s }
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+/* Hero de fiche : zoom lent + parallaxe (JS pose --py) */
+.stone-hero img { transform: translateY(var(--py, 0px)) scale(1.08); animation: hero-zoom-s 6s cubic-bezier(.2,.6,.2,1) forwards; transition: transform .1s linear; }
+@keyframes hero-zoom-s { to { transform: translateY(var(--py, 0px)) scale(1.02); } }
+.stone-hero img.contain { animation: none; transform: none; }
+.tag { opacity: 0; animation: rise .8s .6s ease forwards; }
+
+/* Filets qui se tracent de gauche à droite quand la section apparaît */
+.rule, .section-head + .rule { position: relative; border-top-color: transparent; }
+.rule::after { content: ""; position: absolute; left: 0; top: -1px; height: 1px; width: 0; background: currentColor; transition: width 1.2s cubic-bezier(.2,.65,.2,1); }
+.in > .rule::after, .rule.in::after { width: 100%; }
+
+/* Cartes : l'image glisse, le titre se souligne, le libellé "voir" apparaît */
+.card { position: relative; }
+.card h3 { position: relative; display: inline-block; }
+.card h3::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: currentColor; transition: width .45s cubic-bezier(.2,.65,.2,1); }
+.card:hover h3::after { width: 100%; }
+.card .ph { position: relative; }
+.card .ph::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(28,26,23,.35), transparent 50%); opacity: 0; transition: opacity .5s; }
+.card:hover .ph::after { opacity: 1; }
+.card .ph img { transition: transform 1.2s cubic-bezier(.2,.65,.2,1); }
+.card:hover .ph img { transform: scale(1.06); }
+
+/* Familles : légende qui remonte au survol */
+.family .txt { transform: translateY(8px); transition: transform .6s cubic-bezier(.2,.65,.2,1); }
+.family:hover .txt { transform: none; }
+.family img { transition: transform 1.4s cubic-bezier(.2,.65,.2,1), filter .6s; filter: saturate(.9); }
+.family:hover img { transform: scale(1.06); filter: saturate(1.05); }
+
+/* Boutons : la flèche avance */
+.btn::after { content: "→"; display: inline-block; transition: transform .35s cubic-bezier(.2,.65,.2,1); }
+.btn:hover::after { transform: translateX(5px); }
+.btn-solid::after, .btn-light::after { content: "→"; }
+
+/* Chiffres clés : léger pop à l'arrivée (le compteur est en JS) */
+.facts .n { display: inline-block; }
+.facts .in .n { animation: pop .7s cubic-bezier(.2,.9,.2,1); }
+@keyframes pop { 0% { transform: scale(.92); opacity: .4 } 100% { transform: none; opacity: 1 } }
+
+/* En-tête : se cache en descendant, revient en remontant */
+.site-header { transition: transform .45s cubic-bezier(.2,.65,.2,1), background .3s; }
+.site-header.hide { transform: translateY(-100%); }
+
+/* Lignes de spécification : apparaissent une à une */
+.spec .row, .rows .row { transition-duration: .7s; }
+
+/* Images pleine largeur : zoom lent au scroll (JS pose --z) */
+.full img, .thumb img { transition: transform 1.2s cubic-bezier(.2,.65,.2,1); }
+.full.in img { transform: scale(var(--z, 1)); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; filter: none; }
+  .hero img.bg, .stone-hero img { transform: none; }
+  .hero .wrap > * { opacity: 1; transform: none; }
+  .tag { opacity: 1; }
+  .rule, .section-head + .rule { border-top-color: currentColor; }
+}
