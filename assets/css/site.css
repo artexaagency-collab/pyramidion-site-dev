@@ -12,6 +12,16 @@
 @font-face { font-family: "Inter"; font-weight: 400; src: url("../fonts/inter-400.woff2") format("woff2"); font-display: swap; }
 @font-face { font-family: "Inter"; font-weight: 500; src: url("../fonts/inter-500.woff2") format("woff2"); font-display: swap; }
 @font-face { font-family: "Inter"; font-weight: 600; src: url("../fonts/inter-600.woff2") format("woff2"); font-display: swap; }
+/* Grec : Inter (sous-ensemble grec) et EB Garamond, Garamond de même famille que Cormorant, qui couvre le grec */
+@font-face { font-family: "Inter"; font-weight: 400; src: url("../fonts/inter-greek-400.woff2") format("woff2"); unicode-range: U+0370-03FF, U+1F00-1FFF; font-display: swap; }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("../fonts/inter-greek-500.woff2") format("woff2"); unicode-range: U+0370-03FF, U+1F00-1FFF; font-display: swap; }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("../fonts/inter-greek-600.woff2") format("woff2"); unicode-range: U+0370-03FF, U+1F00-1FFF; font-display: swap; }
+@font-face { font-family: "EB Garamond"; font-weight: 400; src: url("../fonts/ebgaramond-latin-400.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+@font-face { font-family: "EB Garamond"; font-weight: 500; src: url("../fonts/ebgaramond-latin-500.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+@font-face { font-family: "EB Garamond"; font-weight: 600; src: url("../fonts/ebgaramond-latin-600.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+@font-face { font-family: "EB Garamond"; font-weight: 400; src: url("../fonts/ebgaramond-greek-400.woff2") format("woff2"); unicode-range: U+0370-03FF, U+1F00-1FFF; font-display: swap; }
+@font-face { font-family: "EB Garamond"; font-weight: 500; src: url("../fonts/ebgaramond-greek-500.woff2") format("woff2"); unicode-range: U+0370-03FF, U+1F00-1FFF; font-display: swap; }
+@font-face { font-family: "EB Garamond"; font-weight: 600; src: url("../fonts/ebgaramond-greek-600.woff2") format("woff2"); unicode-range: U+0370-03FF, U+1F00-1FFF; font-display: swap; }
 
 /* ---------- Jetons -------------------------------------------------- */
 :root {
@@ -25,10 +35,20 @@
   --ochre-text: #8C5E2C;   /* accent lisible sur fond clair (5.5:1) */
   --ochre-light: #E8C98F;  /* accent sur fond sombre */
   --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --serif-el: "EB Garamond", Georgia, "Times New Roman", serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --max: 1240px;
   --gutter: clamp(20px, 4vw, 56px);
 }
+
+/* Pages grecques : même famille Garamond, légèrement plus petite car l'œil d'EB Garamond est plus grand */
+html[lang="el"] { --serif: var(--serif-el); }
+html[lang="el"] h1, html[lang="el"] h2, html[lang="el"] h3, html[lang="el"] .statement { letter-spacing: 0; }
+html[lang="el"] h1 { font-size: clamp(38px, 5.4vw, 74px); }
+html[lang="el"] .nav { font-size: 11px; letter-spacing: 0.08em; gap: 20px; }
+html[lang="el"] .facts .n { font-size: clamp(26px, 2.5vw, 38px); }
+.nav a { white-space: nowrap; }
+.facts .n { white-space: nowrap; }
 
 /* ---------- Base ---------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -67,6 +87,12 @@ p { margin: 0; text-wrap: pretty; }
 .nav { display: flex; gap: 28px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; }
 .nav a[aria-current="page"] { color: var(--ochre-text); }
 .nav-cta { display: inline-flex; }
+.lang { display: flex; gap: 2px; font-size: 11px; letter-spacing: 0.16em; font-weight: 500; }
+.lang a { padding: 6px 7px; opacity: .55; }
+.lang a:hover, .lang a[aria-current="true"] { opacity: 1; }
+.lang a[aria-current="true"] { color: var(--ochre-text); }
+.site-header.on-dark .lang a[aria-current="true"] { color: var(--ochre-light); }
+.site-header .right { display: flex; align-items: center; gap: 18px; }
 .menu-btn { display: none; background: none; border: 1px solid var(--ink); min-height: 44px; min-width: 44px; padding: 0 14px; font: inherit; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); cursor: pointer; }
 .site-header.on-dark { background: rgba(28,26,23,.55); border-bottom-color: rgba(246,243,238,.18); color: var(--stone); }
 .site-header.on-dark .nav a[aria-current="page"] { color: var(--ochre-light); }
@@ -77,6 +103,7 @@ p { margin: 0; text-wrap: pretty; }
   .nav.open { display: flex; }
   .menu-btn { display: inline-flex; align-items: center; }
   .nav-cta { display: none; }
+  .site-header .right { gap: 10px; }
 }
 
 /* ---------- Hero ---------------------------------------------------- */
